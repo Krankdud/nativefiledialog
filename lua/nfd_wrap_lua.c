@@ -113,6 +113,29 @@ static int l_save(lua_State* L)
     }
 }
 
+static int l_pickFolder(lua_State* L)
+{
+    nfdchar_t* out;
+    const nfdchar_t* initial = luaL_optstring(L, 1, NULL);
+
+    nfdresult_t status = NFD_PickFolder(initial, &out);
+
+    switch (status) {
+	case NFD_OKAY:
+	    lua_pushstring(L, out);
+	    return 1;
+	case NFD_CANCEL:
+	    lua_pushboolean(L, false);
+	    return 1;
+	case NFD_ERROR:
+	    lua_pushstring(L, NFD_GetError());
+	    lua_error(L); // always returns here
+	    return -1;
+	default:
+		return 0;
+    }
+}
+
 static void luax_setfuncs(lua_State *L, const luaL_Reg *l, int nup)
 {
 	luaL_checkstack(L, nup+1, "too many upvalues");
@@ -132,6 +155,7 @@ static const struct luaL_Reg mod [] = {
 	{"open",     l_open},
 	{"openMany", l_openMany},
 	{"save",     l_save},
+    {"pickFolder", l_pickFolder},
 	{NULL, NULL}
 };
 

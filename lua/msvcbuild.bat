@@ -4,8 +4,8 @@ setlocal
 
 @set NFD_CFLAGS=/D_CRT_SECURE_NO_WARNINGS /I"src/include"
 
-@set LUA_INCDIR="F:\Downloads\LuaJIT\include"
-@set LUA_LIBDIR="F:\Downloads\LuaJIT\lua51.lib"
+@set LUA_INCDIR="../luajit/src"
+@set LUA_LIBDIR="../luajit/src/lua51.lib"
 
 @if /I LUA_INCDIR=="" ( echo LUA_INCDIR not specified in msvcbuild.bat & exit )
 @if /I LUA_LIBDIR=="" ( echo LUA_LIBDIR not specified in msvcbuild.bat & exit )
@@ -23,4 +23,4 @@ rem nfd_wrap_lua.obj
 cl /c %CFLAGS% %NFD_CFLAGS% /I%LUA_INCDIR% "lua/nfd_wrap_lua.c" /Fo"nfd_wrap_lua.obj"
 
 rem nfd.dll
-link %LIBFLAG% *.obj %LUA_LIBDIR%
+link %LIBFLAG% "Ole32.lib" "Shell32.lib" *.obj %LUA_LIBDIR%
